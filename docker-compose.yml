@@ -2,7 +2,8 @@ version: '3'
 
 services:
   otrs:
-    image: juanluisbaptiste/otrs:latest
+#    image: juanluisbaptiste/otrs:latest
+    image: myotrsdev
     ports:
       - '80:80'
     # If running behind a proxy container, expose the ports instead
@@ -23,6 +24,7 @@ services:
       - ./volumes/addons:/opt/otrs/addons
       - ./volumes/db_upgrade:/opt/otrs/db_upgrade
       - /etc/localtime:/etc/localtime:ro
+      - /Users/charles/Documents/GitHub/OTRS-Report-SPAM:/AddonDev
   mariadb:
     image: juanluisbaptiste/otrs-mariadb:latest
     expose:
