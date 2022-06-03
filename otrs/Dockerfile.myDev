@@ -1,5 +1,7 @@
 FROM juanluisbaptiste/otrs:latest
 
+RUN yum install -y postfix
+
 RUN yum install -y gcc && \
     yum install -y git && \
     yum install -y perl-App-cpanminus
@@ -8,5 +10,14 @@ RUN yum install -y gcc && \
      cpanm --installdeps /opt/module-tools/. 
 
 RUN cp /opt/module-tools/etc/config.pl.dist /opt/module-tools/etc/config.pl 
+RUN git clone https://github.com/OTRS/Fred /opt/fred
+RUN su -c "/opt/module-tools/bin/otrs.ModuleTools.pl Module::File::Link /opt/fred /opt/otrs" - otrs
+
+# configure bash completion
+#
+COPY ./bash.completion.make /etc/bash_completion.d/make 
+RUN chmod 744 /etc/bash_completion.d/make && \
+    curl https://raw.githubusercontent.com/OTRS/otrs/rel-6_0/.bash_completion >> /opt/otrs/.bash_completion
+
 # && \
 # sed -i -e 's///' /opt/module-tools/etc/config.pl
