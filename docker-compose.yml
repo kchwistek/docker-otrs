@@ -24,7 +24,8 @@ services:
       - ./volumes/addons:/opt/otrs/addons
       - ./volumes/db_upgrade:/opt/otrs/db_upgrade
       - /etc/localtime:/etc/localtime:ro
-      - /Users/charles/Documents/GitHub/OTRS-Report-SPAM:/AddonDev
+      - /Users/charles/Documents/GitHub/znuny-reportspam-handler:/AddonDev
+      - /Users/charles/Documents/GitHub/znuny-ticket-overview-styler:/AddonDev3
   mariadb:
     image: juanluisbaptiste/otrs-mariadb:latest
     expose:
@@ -33,11 +34,19 @@ services:
     volumes:
       - ./volumes/mysql:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
-# If you need a SMTP relay you can use this service
-  # postfix:
-  #   image: juanluisbaptiste/postfix:latest
-  #   expose:
-  #     - '25'
+ 
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+
+  postfix:
+    image: juanluisbaptiste/postfix:latest
+    expose:
+      - '25'
   #   # See juanluisbaptiste/postfix github page for the contents
   #   # and an explanation of credentials-smtp.
-  #   env_file: .env
+    env_file: .env
